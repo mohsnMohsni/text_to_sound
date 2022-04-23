@@ -15,11 +15,11 @@ class TextToAudio:
         self.text = text
         self.name = name
 
-    def text_to_audio(self, lang: str=EN_LANGUAGE_CODE) -> None:
+    def text_to_audio(self, lang: str) -> None:
         sound_from_text = gTTS(self.text, lang=lang)
         sound_from_text.save(self.old_sound_name())
 
-    def convert_type(self, format_: str=WAV_TYPE) -> None:
+    def convert_type(self, format_: str) -> None:
         self.sound = AudioSegment.from_mp3(self.old_sound_name())
         new_sound_name = '{}.{}'.format(self.name, format_)
         self.sound.export(new_sound_name, format=format_)
@@ -27,22 +27,33 @@ class TextToAudio:
     def play(self):
         playback.play(self.sound)
 
-    def run(self):
-        self.text_to_audio()
-        self.convert_type()
+    def run(self, lang: str, format_: str):
+        self.text_to_audio(lang)
+        self.convert_type(format_)
         self.play()
 
+
+class AudioToText:
+
+    def __init__(self, name) -> None:
+        self.name = name
+        self.recognizer = sr.Recognizer()
+
+    def get_audio_file(self, format_: str):
+        sound_name =  '{}.{}'.format(self.name, format_)
+        self.audio_file = sr.AudioFile(sound_name)
+
+    def get_text_from_audio(self):
+        with self.audio_file as source:
+            data = self.recognizer.record(source)
+        res = self.recognizer.recognize_google(data)
+        return res
 
 
 txt = input()
 
 
 
-r = sr.Recognizer()
-check = sr.AudioFile('hello.wav')
-with check as source:
-    data = r.record(source)
-res = r.recognize_google(data)
 
 class bcolors:
     HEADER = '\033[95m'
