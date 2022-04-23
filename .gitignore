@@ -1,4 +1,4 @@
 *.mp3
 *.wav
 venv/
-__pycach__/
+__pycache__/

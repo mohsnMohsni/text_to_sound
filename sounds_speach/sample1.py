@@ -4,7 +4,8 @@ import speech_recognition as sr
 from gtts import gTTS
 from pydub import AudioSegment, playback
 
-from .constants import WAV_TYPE, MP3_TYPE, EN_LANGUAGE_CODE
+from helpers import bcolors
+from constants import WAV_TYPE, MP3_TYPE, EN_LANGUAGE_CODE, FILE_NAME
 
 
 class TextToAudio:
@@ -49,23 +50,25 @@ class AudioToText:
         res = self.recognizer.recognize_google(data)
         return res
 
+    def run(self, format_: str):
+        self.get_audio_file(format_)
+        result = self.get_text_from_audio()
+        return result
 
-txt = input()
+
+class SoundsSpeach:
+
+    def __init__(self) -> None:
+        text_ = input(f'{bcolors.BLUE}Input a text: {bcolors.ENDC}')
+        while len(text_) > 10:
+            text_ = input(f'{bcolors.WARNING}Try a longer text, again input a text: {bcolors.ENDC}')
+        self.text = text_
+
+    def handler(self):
+        TextToAudio(self.text, FILE_NAME).run(EN_LANGUAGE_CODE, WAV_TYPE)
+        result = AudioToText(FILE_NAME).run(WAV_TYPE)
+        print()
+        print(f"{bcolors.GREEN}{result}{bcolors.ENDC}", end='\n\n')
 
 
-
-
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
-print()
-print(f"{bcolors.OKGREEN}{res}{bcolors.ENDC}")
-print()
+SoundsSpeach().handler()
