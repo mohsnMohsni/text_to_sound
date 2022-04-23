@@ -69,5 +69,5 @@ class SoundsSpeach:
         result = AudioToText(FILE_NAME).run(WAV_TYPE)
         print(f"\n{bcolors.GREEN}{result}{bcolors.ENDC}", end='\n\n')
 
-
-SoundsSpeach().handler()
+if __name__ == '__main__':
+    SoundsSpeach().handler()
