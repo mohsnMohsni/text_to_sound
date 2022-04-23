@@ -47,7 +47,12 @@ class AudioToText:
     def get_text_from_audio(self):
         with self.audio_file as source:
             data = self.recognizer.record(source)
-        res = self.recognizer.recognize_google(data)
+        try:
+            res = self.recognizer.recognize_google(data)
+        except sr.UnknownValueError:
+            err_message = 'can\'t read this text from palyed voice.'
+            print(f"\n{bcolors.DANGER}{err_message}{bcolors.ENDC}", end='')
+            res = ''
         return res
 
     def run(self, format_: str):
@@ -59,10 +64,7 @@ class AudioToText:
 class SoundsSpeach:
 
     def __init__(self) -> None:
-        text_ = input(f'\n{bcolors.BLUE}Input a text: {bcolors.ENDC}')
-        while len(text_) < 25:
-            text_ = input(f'{bcolors.WARNING}Try a longer text(more than 25 char), again input a text: {bcolors.ENDC}')
-        self.text = text_
+        self.text = input(f'\n{bcolors.BLUE}Input a text: {bcolors.ENDC}')
 
     def handler(self):
         TextToAudio(self.text, FILE_NAME).run(EN_LANGUAGE_CODE, WAV_TYPE)
