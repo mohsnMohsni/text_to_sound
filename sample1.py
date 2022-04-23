@@ -15,27 +15,28 @@ class TextToAudio:
         self.text = text
         self.name = name
 
-    def text_to_audio(self, lang=EN_LANGUAGE_CODE) -> None:
+    def text_to_audio(self, lang: str=EN_LANGUAGE_CODE) -> None:
         sound_from_text = gTTS(self.text, lang=lang)
         sound_from_text.save(self.old_sound_name())
 
-    def output(self, format_=WAV_TYPE) -> None:
-        sound = AudioSegment.from_mp3(self.old_sound_name())
-        new_sound_name = '{0}.{1}'.format(self.name, format_)
-        sound.export(new_sound_name, format=format_)
+    def convert_type(self, format_: str=WAV_TYPE) -> None:
+        self.sound = AudioSegment.from_mp3(self.old_sound_name())
+        new_sound_name = '{}.{}'.format(self.name, format_)
+        self.sound.export(new_sound_name, format=format_)
 
+    def play(self):
+        playback.play(self.sound)
+
+    def run(self):
+        self.text_to_audio()
+        self.convert_type()
+        self.play()
 
 
 
 txt = input()
 
-hello = gTTS(txt, lang='en')
 
-
-sound = AudioSegment.from_mp3('hello.mp3')
-sound.export('hello.wav', format='wav')
-
-playback.play(sound)
 
 r = sr.Recognizer()
 check = sr.AudioFile('hello.wav')
