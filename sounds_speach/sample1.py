@@ -59,16 +59,15 @@ class AudioToText:
 class SoundsSpeach:
 
     def __init__(self) -> None:
-        text_ = input(f'{bcolors.BLUE}Input a text: {bcolors.ENDC}')
-        while len(text_) > 10:
-            text_ = input(f'{bcolors.WARNING}Try a longer text, again input a text: {bcolors.ENDC}')
+        text_ = input(f'\n{bcolors.BLUE}Input a text: {bcolors.ENDC}')
+        while len(text_) < 25:
+            text_ = input(f'{bcolors.WARNING}Try a longer text(more than 25 char), again input a text: {bcolors.ENDC}')
         self.text = text_
 
     def handler(self):
         TextToAudio(self.text, FILE_NAME).run(EN_LANGUAGE_CODE, WAV_TYPE)
         result = AudioToText(FILE_NAME).run(WAV_TYPE)
-        print()
-        print(f"{bcolors.GREEN}{result}{bcolors.ENDC}", end='\n\n')
+        print(f"\n{bcolors.GREEN}{result}{bcolors.ENDC}", end='\n\n')
 
 
 SoundsSpeach().handler()
